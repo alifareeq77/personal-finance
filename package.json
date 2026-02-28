@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "dev:network": "next dev -H 0.0.0.0",
-    "build": "node scripts/prisma-set-provider.cjs && cross-env PRISMA_HIDE_UPDATE_MESSAGE=1 prisma generate --no-hint && prisma db push && next build",
+    "build": "node scripts/prisma-set-provider.cjs && cross-env PRISMA_HIDE_UPDATE_MESSAGE=1 prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "node scripts/prisma-set-provider.cjs && cross-env PRISMA_HIDE_UPDATE_MESSAGE=1 prisma generate --no-hint",
+    "postinstall": "node scripts/prisma-set-provider.cjs && cross-env PRISMA_HIDE_UPDATE_MESSAGE=1 prisma generate",
     "db:push": "node scripts/prisma-set-provider.cjs && prisma db push",
     "db:migrate": "node scripts/prisma-set-provider.cjs && prisma migrate dev"
   },
