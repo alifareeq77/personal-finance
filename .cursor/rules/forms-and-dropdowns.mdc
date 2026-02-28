@@ -1,0 +1,23 @@
+---
+description: Form inputs and dropdown standards — input-glass, custom dropdowns, SourcePicker
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# Forms and Dropdowns
+
+## Inputs
+- Use **`input-glass`** for text, date, and currency inputs. It already includes `min-h-[44px] px-4 w-full`; do not add a redundant `w-full` on the wrapper.
+- Add **`no-number-spinner`** to number/currency inputs (e.g. with `CurrencyInput`).
+- Keep triggers and inputs consistent with `SourceForm`, `DepositForm`, and `TransactionDetail`.
+
+## Dropdowns (selects)
+- **Do not** rely on native `<select>` for the option list when the opened list must match the app's glass style. Native option styling is limited and inconsistent across browsers.
+- **Source selection**: Use the **`SourcePicker`** component (from `@/components/SourcePicker`). Wrap in `card-glass rounded-xl overflow-hidden` when inside a card. Use a hidden `<input name="sourceId" value={sourceId} />` when the value must be submitted with a form.
+- **Other single-select dropdowns** (e.g. kind/type): Use the **custom dropdown** pattern:
+  - **Trigger**: `<button type="button" className="select-trigger-inset w-full text-left flex items-center min-h-[44px] pr-10 pl-4">` with chevron SVG that rotates when open.
+  - **List**: Render via `createPortal(..., document.body)`. `<ul>`: `className="fixed z-[9999] max-h-[min(280px,60vh)] list-none overflow-y-auto overflow-x-hidden rounded-xl bg-primary-muted p-0 shadow-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-2xl"` and inline `top`, `left`, `width` from trigger rect, plus `backdropFilter: 'blur(20px)'`.
+  - **Options**: Each `<li role="option" className="block shadow-[0_1px_0_0_rgba(255,255,255,0.03)] last:shadow-none">` wrapping a `<button type="button" className="block w-full min-h-[44px] px-4 py-2.5 text-left text-base text-white transition-colors active:bg-white/10">`.
+  - Use `useLayoutEffect` to measure trigger rect when open; close on outside click. For form submit, use a hidden `<input name="..." value={...} />`.
+
+Reference: `SourcePicker.tsx`, `MonthlyTemplateForm.tsx` (kind dropdown), `TransactionDetail.tsx` (kind + source).

@@ -56,21 +56,30 @@ export default async function TransactionsPage({
     year === new Date().getFullYear() && month === new Date().getMonth() + 1;
 
   return (
-    <main className="flex-1 min-h-0 flex flex-col px-4 pt-[var(--safe-top)] pb-6">
+    <main className="flex-1 min-h-0 flex flex-col px-4 pt-[var(--safe-top)] pb-6 animate-page-in">
       <div className="mx-auto max-w-md flex flex-col min-h-0 flex-1 w-full">
         <h1 className="text-xl font-semibold pt-2 pb-4 shrink-0">{ar.transactions.title}</h1>
         <div className="card-glass mb-4 p-4 shrink-0">
           <MonthPicker />
         </div>
-        <div className="card-glass mb-5 p-4 text-sm shrink-0">
-          <p className="text-gray-500">{isCurrentMonth ? ar.transactions.thisMonthSoFar : monthLabel}</p>
-          <p className="mt-1">
-            {ar.transactions.in} <span className="text-accent">{formatNum(summary.inTotal)}</span>
-            {' · '}
-            {ar.transactions.out} <span className="text-red-400">{formatNum(summary.outTotal)}</span>
-            {' · '}
-            {ar.transactions.net} <span className={summary.net >= 0 ? 'text-accent' : 'text-red-400'}>{formatNum(summary.net)}</span>
-          </p>
+        <div className="mb-5 shrink-0">
+          <p className="text-gray-500 text-sm mb-2">{isCurrentMonth ? ar.transactions.thisMonthSoFar : monthLabel}</p>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="card-glass p-3 text-center">
+              <p className="text-gray-500 text-xs">{ar.transactions.in}</p>
+              <p className="mt-0.5 text-accent font-semibold tabular-nums text-sm">{formatNum(summary.inTotal)}</p>
+            </div>
+            <div className="card-glass p-3 text-center">
+              <p className="text-gray-500 text-xs">{ar.transactions.out}</p>
+              <p className="mt-0.5 text-red-400 font-semibold tabular-nums text-sm">{formatNum(summary.outTotal)}</p>
+            </div>
+            <div className="card-glass p-3 text-center">
+              <p className="text-gray-500 text-xs">{ar.transactions.net}</p>
+              <p className={`mt-0.5 font-semibold tabular-nums text-sm ${summary.net >= 0 ? 'text-accent' : 'text-red-400'}`}>
+                {formatNum(summary.net)}
+              </p>
+            </div>
+          </div>
         </div>
         <div className="flex gap-2.5 mb-5 shrink-0">
           <Link
@@ -92,8 +101,8 @@ export default async function TransactionsPage({
         ) : (
           <div className="scroll-list flex-1 min-h-0 -mx-1 px-1">
             <ul className="space-y-2 pb-2">
-              {transactions.map((t) => (
-                <li key={t.id}>
+              {transactions.map((t, i) => (
+                <li key={t.id} className="animate-list-in" style={{ animationDelay: `${i * 45}ms` }}>
                   <Link
                     href={`/transactions/${t.id}`}
                     className="card-glass flex items-center justify-between px-4 py-3.5 active:opacity-90 block"

@@ -1,0 +1,26 @@
+---
+description: Core project guidelines — stack, i18n, currency, and glass UI
+alwaysApply: true
+---
+
+# Personal Finance Tracker — Project Guidelines
+
+## Stack
+- **Next.js** App Router, **TypeScript**, **Tailwind**, **Prisma**. Mobile-first; optimized for iPhone Safari and slow networks.
+
+## Data & i18n
+- **Currency**: IQD only; amounts stored as integers. Use `formatNum` from `@/lib/currency` for display.
+- **Strings**: Use `ar` from `@/lib/ar` for all user-facing copy (no hardcoded English in UI).
+- **Single-user**: No auth by default; data layer is ready for auth later.
+
+## UI — Glass design system
+All UI uses the glass styles in `app/globals.css`:
+
+- **Cards**: `card-glass` (rounded-2xl, glass bg, subtle border).
+- **Text/date/number inputs**: `input-glass`; add `no-number-spinner` for number inputs.
+- **Buttons**: `btn-glass` (neutral), `btn-glass-accent` (primary/green), `btn-glass-secondary` (purple).
+- **Selects**: Prefer **custom dropdowns** (see forms rule); trigger uses `select-trigger-inset`. Do not use native `<select>` for option lists that must match app styling — use the custom dropdown pattern or `SourcePicker` for source fields.
+
+## Forms
+- **Labels**: `mb-1.5 block text-gray-500 text-sm`.
+- **Layout**: Use existing patterns from `SourceForm`, `DepositForm`, `MonthlyTemplateForm`, and `TransactionDetail` for consistency.

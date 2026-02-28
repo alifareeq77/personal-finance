@@ -31,12 +31,12 @@ export function AddDebtModal({ sources }: { sources: { id: string; name: string 
       aria-labelledby="add-debt-title"
     >
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-modal-overlay"
         aria-hidden
         onClick={close}
       />
       <div
-        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--color-primary-muted)] shadow-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-2xl"
+        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--color-primary-muted)] shadow-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-2xl animate-modal-content"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 flex items-center justify-between gap-3 px-4 py-3 bg-[var(--color-primary-muted)] z-10 shadow-[0_1px_0_0_rgba(255,255,255,0.03)]">

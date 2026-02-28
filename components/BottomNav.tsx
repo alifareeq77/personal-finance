@@ -1,7 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ar } from '@/lib/ar';
 
 const iconProps = { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
@@ -20,8 +21,16 @@ const navItems: { href: string; label: string; icon: keyof typeof navIcons }[] =
   { href: '/settings', label: ar.nav.settings, icon: 'Settings' },
 ];
 
+const NAV_HREFS = navItems.map((item) => item.href);
+
 export function BottomNav() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    NAV_HREFS.forEach((href) => router.prefetch(href));
+  }, [router]);
+
   if (pathname === '/login') return null;
   return (
     <nav

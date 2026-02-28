@@ -48,8 +48,8 @@ export const ar = {
   transactions: {
     title: 'المعاملات',
     thisMonthSoFar: 'هذا الشهر حتى الآن',
-    in: 'داخل',
-    out: 'خارج',
+    in: 'دخل',
+    out: 'مصروفات',
     net: 'الصافي',
     deposit: 'إيداع',
     withdraw: 'سحب',

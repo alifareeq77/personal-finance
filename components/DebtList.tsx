@@ -43,8 +43,8 @@ export function DebtList({ debts }: { debts: Debt[] }) {
     <div className="space-y-4 pb-2">
       {openDebts.length > 0 && (
         <ul className="space-y-2">
-          {openDebts.map((d) => (
-            <li key={d.id} className="card-glass flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl">
+          {openDebts.map((d, i) => (
+            <li key={d.id} className="card-glass flex items-center justify-between gap-3 px-4 py-3.5 rounded-2xl animate-list-in" style={{ animationDelay: `${i * 45}ms` }}>
               <div className="min-w-0 flex-1">
                 <p className="text-gray-400 text-sm truncate">{d.personName}</p>
                 <p className={`text-sm font-semibold tabular-nums ${d.direction === 'RECEIVABLE' ? 'text-accent' : 'text-red-400'}`}>
