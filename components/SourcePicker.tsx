@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { formatNum } from '@/lib/currency';
 
 type Source = { id: string; name: string };
 
@@ -9,11 +10,13 @@ export function SourcePicker({
   sources,
   value,
   onChange,
+  selectedBalance,
   className = '',
 }: {
   sources: Source[];
   value: string | null;
   onChange: (id: string | null) => void;
+  selectedBalance?: number;
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -94,7 +97,17 @@ export function SourcePicker({
           aria-expanded={open}
           aria-label="Source"
         >
-          <span>{displayName}</span>
+          <span className="flex items-center justify-between w-full gap-2 min-w-0">
+            <span className="text-left truncate min-w-0">{displayName}</span>
+            {selectedBalance !== undefined && (
+              <span
+                className={`text-sm tabular-nums shrink-0 ${selectedBalance < 0 ? 'text-red-400' : 'text-gray-400'}`}
+                aria-hidden
+              >
+                {formatNum(selectedBalance)} د.ع
+              </span>
+            )}
+          </span>
           <span
             className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200"
             style={{ transform: open ? 'translateY(-50%) rotate(180deg)' : 'translateY(-50%) rotate(0deg)' }}

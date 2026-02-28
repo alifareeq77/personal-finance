@@ -16,6 +16,34 @@ export async function getSources(includeArchived = false) {
   )();
 }
 
+/** Current balance per source: initialBalanceIqd + INCOME/DEPOSIT - EXPENSE/WITHDRAW/TRANSFER */
+export async function getSourceBalances(includeArchived = false): Promise<Record<string, number>> {
+  return unstable_cache(
+    async () => {
+      const sources = await prisma.source.findMany({
+        where: includeArchived ? undefined : { isArchived: false },
+        select: { id: true, initialBalanceIqd: true },
+      });
+      const txns = await prisma.transaction.findMany({
+        select: { sourceId: true, kind: true, amountIqd: true },
+      });
+      const deltaBySource: Record<string, number> = {};
+      for (const t of txns) {
+        if (!deltaBySource[t.sourceId]) deltaBySource[t.sourceId] = 0;
+        if (t.kind === 'INCOME' || t.kind === 'DEPOSIT') deltaBySource[t.sourceId] += t.amountIqd;
+        else if (t.kind === 'EXPENSE' || t.kind === 'WITHDRAW' || t.kind === 'TRANSFER') deltaBySource[t.sourceId] -= t.amountIqd;
+      }
+      const out: Record<string, number> = {};
+      for (const s of sources) {
+        out[s.id] = (s.initialBalanceIqd ?? 0) + (deltaBySource[s.id] ?? 0);
+      }
+      return out;
+    },
+    ['source-balances', includeArchived ? 'archived' : 'active'],
+    { revalidate: 60, tags: ['sources', 'source-balances'] }
+  )();
+}
+
 export async function createSource(formData: FormData) {
   const name = (formData.get('name') as string)?.trim();
   if (!name) return { error: 'Name is required' };

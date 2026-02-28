@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "dev:network": "next dev -H 0.0.0.0",
-    "build": "node scripts/prisma-set-provider.cjs && prisma generate && prisma db push && next build",
+    "build": "node scripts/prisma-set-provider.cjs && cross-env PRISMA_HIDE_UPDATE_MESSAGE=1 prisma generate --no-hint && prisma db push && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "node scripts/prisma-set-provider.cjs && prisma generate",
+    "postinstall": "node scripts/prisma-set-provider.cjs && cross-env PRISMA_HIDE_UPDATE_MESSAGE=1 prisma generate --no-hint",
     "db:push": "node scripts/prisma-set-provider.cjs && prisma db push",
     "db:migrate": "node scripts/prisma-set-provider.cjs && prisma migrate dev"
   },
@@ -23,6 +23,7 @@
     "@types/react": "^18.2.62",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.19",
+    "cross-env": "^10.1.0",
     "postcss": "^8.4.39",
     "prisma": "^5.20.0",
     "tailwindcss": "^3.4.3",

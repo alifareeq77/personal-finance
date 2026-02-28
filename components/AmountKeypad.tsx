@@ -31,11 +31,13 @@ export function AmountKeypad({
   onChange,
   onSave,
   disabled,
+  saveLabel = ar.common.save,
 }: {
   value: string;
   onChange: (v: string) => void;
   onSave: () => void;
   disabled?: boolean;
+  saveLabel?: string;
 }) {
   const display = value || '0';
   const isValidStep = parseAmountIqd(Number(value || '0')) !== null;
@@ -92,7 +94,7 @@ export function AmountKeypad({
           disabled={disabled || !value || !isValidStep}
           className="min-h-[56px] touch-manipulation rounded-2xl text-lg font-medium btn-glass-accent disabled:opacity-40 disabled:pointer-events-none"
         >
-          {ar.common.save}
+          {saveLabel}
         </button>
       </div>
     </div>

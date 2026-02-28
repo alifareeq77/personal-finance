@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { archiveSource, unarchiveSource } from '@/lib/actions/sources';
+import { formatNum } from '@/lib/currency';
 import { ar } from '@/lib/ar';
 
 type Source = { id: string; name: string; type: string | null; isArchived: boolean };
@@ -37,7 +38,7 @@ function RestoreIcon() {
   );
 }
 
-export function SourcesSection({ sources }: { sources: Source[] }) {
+export function SourcesSection({ sources, sourceBalances = {} }: { sources: Source[]; sourceBalances?: Record<string, number> }) {
   const [archiving, setArchiving] = useState<string | null>(null);
   const active = sources.filter((s) => !s.isArchived);
   const archived = sources.filter((s) => s.isArchived);
@@ -57,10 +58,19 @@ export function SourcesSection({ sources }: { sources: Source[] }) {
         </Link>
       </div>
       <ul className="space-y-2">
-        {active.map((s) => (
-          <li key={s.id} className="card-glass flex items-center justify-between px-4 py-3.5">
-            <span>{s.name}</span>
-            <div className="flex items-center gap-2">
+        {active.map((s) => {
+          const balance = sourceBalances[s.id];
+          return (
+          <li key={s.id} className="card-glass flex items-center justify-between gap-3 px-4 py-3.5">
+            <div className="flex flex-col min-w-0">
+              <span>{s.name}</span>
+              {balance !== undefined && (
+                <span className={`text-sm tabular-nums ${balance < 0 ? 'text-red-400' : 'text-gray-400'}`}>
+                  {formatNum(balance)} د.ع
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
               <Link
                 href={`/settings/sources/${s.id}`}
                 className="btn-glass flex min-h-[36px] min-w-[36px] items-center justify-center rounded-xl text-sm"
@@ -82,20 +92,31 @@ export function SourcesSection({ sources }: { sources: Source[] }) {
               </button>
             </div>
           </li>
-        ))}
-        {archived.map((s) => (
-          <li key={s.id} className="card-glass flex items-center justify-between px-4 py-2.5 text-gray-500 opacity-80">
-            <span>{s.name} ({ar.settings.archived})</span>
+          );
+        })}
+        {archived.map((s) => {
+          const balance = sourceBalances[s.id];
+          return (
+          <li key={s.id} className="card-glass flex items-center justify-between gap-3 px-4 py-2.5 text-gray-500 opacity-80">
+            <div className="flex flex-col min-w-0">
+              <span>{s.name} ({ar.settings.archived})</span>
+              {balance !== undefined && (
+                <span className={`text-sm tabular-nums ${balance < 0 ? 'text-red-400' : 'text-gray-400'}`}>
+                  {formatNum(balance)} د.ع
+                </span>
+              )}
+            </div>
             <button
               type="button"
               onClick={() => unarchiveSource(s.id)}
-              className="btn-glass flex min-h-[36px] min-w-[36px] items-center justify-center rounded-xl text-sm"
+              className="btn-glass flex min-h-[36px] min-w-[36px] items-center justify-center rounded-xl text-sm shrink-0"
               aria-label={ar.settings.restore}
             >
               <RestoreIcon />
             </button>
           </li>
-        ))}
+          );
+        })}
       </ul>
       {sources.length === 0 && (
         <p className="text-gray-500 text-sm">{ar.settings.noSourcesHint}</p>

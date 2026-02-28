@@ -15,8 +15,10 @@ const TOAST_EXIT_MS = 200;
 
 export function QuickAddForm({
   sources,
+  sourceBalances,
 }: {
   sources: { id: string; name: string }[];
+  sourceBalances?: Record<string, number>;
 }) {
   const [amount, setAmount] = useState('');
   const [sourceId, setSourceId] = useState<string | null>(null);
@@ -129,6 +131,7 @@ export function QuickAddForm({
             sources={sources}
             value={effectiveSourceId}
             onChange={(id) => setSourceId(id)}
+            selectedBalance={effectiveSourceId ? sourceBalances?.[effectiveSourceId] : undefined}
           />
         </div>
       )}
@@ -137,6 +140,7 @@ export function QuickAddForm({
         onChange={setAmount}
         onSave={handleSave}
         disabled={isPending}
+        saveLabel={ar.home.spend}
       />
     </div>
   );

@@ -23,6 +23,7 @@ export const ar = {
   home: {
     title: 'إضافة مصروف سريع',
     addSourceHint: 'أضف مصدراً من الإعدادات لتسجيل المصروفات.',
+    spend: 'صرف',
     saved: 'تم الحفظ',
     saveFailed: 'فشل الحفظ',
   },
@@ -146,6 +147,25 @@ export const ar = {
   },
   monthlyForm: {
     save: 'حفظ',
+  },
+  auth: {
+    login: 'تسجيل الدخول',
+    password: 'كلمة المرور',
+    passwordPlaceholder: 'أدخل كلمة المرور',
+    wrongPassword: 'كلمة المرور غير صحيحة',
+    logout: 'تسجيل الخروج',
+    setPasswordTitle: 'تعيين كلمة مرور لهذا الجهاز',
+    setPasswordHint: 'ستُستخدم لفتح التطبيق على هذا الجهاز فقط.',
+    confirmPassword: 'تأكيد كلمة المرور',
+    confirmPlaceholder: 'أدخل كلمة المرور مرة أخرى',
+    setPassword: 'تعيين',
+    passwordRequired: 'أدخل كلمة المرور',
+    passwordTooShort: 'كلمة المرور قصيرة جداً (4 أحرف على الأقل)',
+    passwordMismatch: 'كلمتا المرور غير متطابقتين',
+    setPasswordFirst: 'عيّن كلمة مرور أولاً من الرابط أدناه.',
+    alreadySetHint: 'تم تعيين كلمة مرور على هذا الجهاز. أدخلها للدخول.',
+    switchToEnter: 'لديك كلمة مرور؟ أدخلها',
+    switchToSet: 'تعيين كلمة مرور لهذا الجهاز',
   },
   errors: {
     somethingWrong: 'حدث خطأ',

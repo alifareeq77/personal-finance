@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { parseAmountIqd, IQD_AMOUNT_ERROR } from '@/lib/currency';
 
@@ -21,6 +21,7 @@ export async function quickAddExpense(amountIqd: number, sourceId: string) {
   });
   revalidatePath('/');
   revalidatePath('/transactions');
+  revalidateTag('source-balances');
   return {};
 }
 
@@ -50,6 +51,7 @@ export async function addDeposit(formData: FormData) {
   await prisma.transaction.create({ data });
   revalidatePath('/');
   revalidatePath('/transactions');
+  revalidateTag('source-balances');
   return {};
 }
 
@@ -79,6 +81,7 @@ export async function addWithdraw(formData: FormData) {
   await prisma.transaction.create({ data });
   revalidatePath('/');
   revalidatePath('/transactions');
+  revalidateTag('source-balances');
   return {};
 }
 
@@ -131,8 +134,10 @@ export async function updateTransaction(id: string, formData: FormData) {
     data.fxFromAmount = fromAmt ?? undefined;
   }
   await prisma.transaction.update({ where: { id }, data });
+  revalidatePath('/');
   revalidatePath('/transactions');
   revalidatePath(`/transactions/${id}`);
+  revalidateTag('source-balances');
   return {};
 }
 
