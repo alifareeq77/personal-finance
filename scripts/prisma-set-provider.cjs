@@ -2,7 +2,13 @@ const fs = require('fs');
 const path = require('path');
 
 const schemaPath = path.join(__dirname, '..', 'prisma', 'schema.prisma');
-const url = process.env.DATABASE_URL || '';
+// Prisma generate requires DATABASE_URL to be set when parsing the schema (e.g. on Vercel install).
+// Use a placeholder so generate succeeds; runtime will use the real env var.
+let url = process.env.DATABASE_URL || '';
+if (!url) {
+  url = 'file:./prisma/dev.db';
+  process.env.DATABASE_URL = url;
+}
 
 let provider = 'sqlite';
 if (url.startsWith('postgresql:') || url.startsWith('postgres:')) {
