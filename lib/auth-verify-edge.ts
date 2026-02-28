@@ -21,7 +21,7 @@ export async function verifyAuthToken(cookieValue: string | undefined): Promise<
   try {
     const base64 = cookieValue.replace(/-/g, '+').replace(/_/g, '/');
     const binary = atob(base64);
-    const raw = new TextDecoder().decode(new Uint8Array([...binary].map((c) => c.charCodeAt(0))));
+    const raw = new TextDecoder().decode(new Uint8Array(binary.split('').map((c) => c.charCodeAt(0))));
     const { h, e, sig } = JSON.parse(raw) as { h: string; e: number; sig: string };
     if (typeof h !== 'string' || typeof e !== 'number' || typeof sig !== 'string') return false;
     if (e < Date.now()) return false;
