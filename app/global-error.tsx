@@ -19,6 +19,9 @@ export default function GlobalError({
             {ar.errors.ensureEnv}{' '}
             <code className="bg-white/10 px-1 rounded">DATABASE_URL=&quot;file:./prisma/dev.db&quot;</code> {ar.errors.runDbPush}
           </p>
+          <p className="mt-2 text-gray-500 text-xs">
+            {ar.errors.vercelHint}
+          </p>
           <button
             type="button"
             onClick={reset}

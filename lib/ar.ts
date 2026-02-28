@@ -154,6 +154,7 @@ export const ar = {
     ensureEnv: 'تأكد أن الملف .env يحتوي على',
     runDbPush: 'ثم نفّذ: npx prisma db push',
     ifJustSetup: 'إذا كنت قد أعددت التطبيق للتو، نفّذ:',
+    vercelHint: 'على Vercel: أضف DATABASE_URL في Environment Variables ثم أعد النشر (يُنشئ الجداول تلقائياً عند البناء).',
   },
   amountPlaceholder: 'مثل: 250، 500، 1,000',
   amountPlaceholderIqd: 'مثل: 250، 500، 1,000 د.ع',

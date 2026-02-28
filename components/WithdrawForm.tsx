@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { addWithdraw } from '@/lib/actions/transactions';
 import { roundToIqdStep } from '@/lib/currency';
 import { ar } from '@/lib/ar';
@@ -44,8 +45,17 @@ export function WithdrawForm({
 
   if (sources.length === 0) {
     return (
-      <div className="card-glass border-secondary/30 bg-secondary-dim p-5">
+      <div className="card-glass border-secondary/30 bg-secondary-dim p-5 space-y-4">
         <p className="text-secondary text-sm">{ar.withdraw.addSourceFirst}</p>
+        <Link
+          href="/settings/sources/new"
+          className="btn-glass-accent flex min-h-[48px] items-center justify-center gap-2 rounded-xl text-sm font-medium"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          {ar.settings.newSource}
+        </Link>
       </div>
     );
   }

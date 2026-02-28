@@ -24,6 +24,9 @@ export default function Error({
         <p className="mt-4 text-gray-500 text-xs">
           {ar.errors.ifJustSetup} <code className="bg-white/10 px-1 rounded">npx prisma db push</code>
         </p>
+        <p className="mt-2 text-gray-500 text-xs">
+          {ar.errors.vercelHint}
+        </p>
         <button
           type="button"
           onClick={reset}
