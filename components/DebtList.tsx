@@ -40,7 +40,7 @@ export function DebtList({ debts }: { debts: Debt[] }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pb-2">
       {openDebts.length > 0 && (
         <ul className="space-y-2">
           {openDebts.map((d) => (

@@ -7,7 +7,7 @@ import { parseAmountIqd, IQD_AMOUNT_ERROR } from '@/lib/currency';
 export async function getSources(includeArchived = false) {
   return unstable_cache(
     async () =>
-      prisma.source.findMany({
+      await prisma.source.findMany({
         where: includeArchived ? undefined : { isArchived: false },
         orderBy: { createdAt: 'asc' },
       }),

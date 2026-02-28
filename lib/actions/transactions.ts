@@ -86,15 +86,15 @@ export async function addWithdraw(formData: FormData) {
 }
 
 export async function getTransactions(limit = 100) {
-  return prisma.transaction.findMany({
+  return await prisma.transaction.findMany({
     include: { source: true },
-    orderBy: { date: 'desc' },
+    orderBy: { date: 'asc' },
     take: limit,
   });
 }
 
 export async function getTransaction(id: string) {
-  return prisma.transaction.findUnique({
+  return await prisma.transaction.findUnique({
     where: { id },
     include: { source: true },
   });
@@ -149,10 +149,10 @@ function monthRange(year: number, month: number) {
 
 export async function getTransactionsForMonth(year: number, month: number) {
   const { start, end } = monthRange(year, month);
-  return prisma.transaction.findMany({
+  return await prisma.transaction.findMany({
     where: { date: { gte: start, lte: end } },
     include: { source: true },
-    orderBy: { date: 'desc' },
+    orderBy: { date: 'asc' },
   });
 }
 

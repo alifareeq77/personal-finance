@@ -6,7 +6,7 @@ import { parseAmountIqd, IQD_AMOUNT_ERROR } from '@/lib/currency';
 
 /** Multi-entry templates (name + items with description, amount, source, kind) */
 export async function getMonthlyTemplates() {
-  return prisma.monthlyTemplate.findMany({
+  return await prisma.monthlyTemplate.findMany({
     include: {
       items: {
         include: { source: true },

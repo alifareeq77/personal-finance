@@ -10,7 +10,7 @@ export default async function EditSourcePage({ params }: { params: Promise<{ id:
   const source = await prisma.source.findUnique({ where: { id } });
   if (!source) notFound();
   return (
-    <main className="min-h-dvh px-4 pt-[var(--safe-top)] pb-6">
+    <main className="min-h-dvh px-4 pt-[var(--safe-top)] pb-below-nav overflow-y-auto">
       <div className="mx-auto max-w-md">
         <div className="flex items-center gap-2 pt-2 pb-4">
           <BackLink href="/settings" label={ar.nav.settings} />

@@ -9,8 +9,10 @@ import { SourcePicker } from '@/components/SourcePicker';
 
 export function AddDebtForm({
   sources,
+  onSuccess,
 }: {
   sources: { id: string; name: string }[];
+  onSuccess?: () => void;
 }) {
   const router = useRouter();
   const [direction, setDirection] = useState<'RECEIVABLE' | 'PAYABLE'>('RECEIVABLE');
@@ -38,12 +40,13 @@ export function AddDebtForm({
         setAmount('');
         setPersonName('');
         router.refresh();
+        onSuccess?.();
       }
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="card-glass mb-6 w-full min-w-0 space-y-4 p-5">
+    <form onSubmit={handleSubmit} className="w-full min-w-0 space-y-4">
       <div className="flex gap-2">
         <button
           type="button"

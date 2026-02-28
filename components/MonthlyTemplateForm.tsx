@@ -265,20 +265,53 @@ export function MonthlyTemplateForm({
       </div>
 
       {initial !== undefined && (
-        <label className="flex items-center gap-2 text-gray-400 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            checked={isActive}
-            onChange={(e) => setIsActive(e.target.checked)}
-            className="rounded"
-          />
-          {ar.settings.active}
+        <label className="flex items-center justify-between gap-3 cursor-pointer group">
+          <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+            {ar.settings.active}
+          </span>
+          <span
+            role="switch"
+            aria-checked={isActive}
+            tabIndex={0}
+            data-state={isActive ? 'on' : 'off'}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsActive((v) => !v);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                setIsActive((v) => !v);
+              }
+            }}
+            className="toggle-switch"
+          >
+            <input
+              type="checkbox"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+              className="sr-only"
+              aria-hidden
+              tabIndex={-1}
+            />
+            <span className="toggle-switch-thumb" aria-hidden />
+          </span>
         </label>
       )}
 
       <button
         type="submit"
-        disabled={isPending || !templateName.trim() || items.every((i) => !i.name?.trim() || i.amountIqd <= 0)}
+        disabled={
+          isPending ||
+          !templateName.trim() ||
+          !items.some(
+            (i) =>
+              (i.name?.trim() ?? '') !== '' &&
+              (Number(i.amountIqd) || 0) > 0 &&
+              (i.sourceId || sources[0]?.id)
+          )
+        }
         className="w-full min-h-[48px] btn-glass-accent disabled:opacity-40"
       >
         {ar.monthlyForm.save}

@@ -6,7 +6,7 @@ import { parseAmountIqd, IQD_AMOUNT_ERROR } from '@/lib/currency';
 
 export async function getDebts() {
   const debts = await prisma.debt.findMany({
-    orderBy: { date: 'desc' },
+    orderBy: { date: 'asc' },
   });
   const sourceIds = Array.from(new Set(debts.map((d) => d.sourceId).filter(Boolean))) as string[];
   const sources = sourceIds.length
@@ -30,8 +30,9 @@ export async function getDebtTotals() {
   let receivable = 0;
   let payable = 0;
   for (const r of rows) {
-    if (r.direction === 'RECEIVABLE') receivable += r.amountIqd;
-    else payable += r.amountIqd;
+    const amount = Number(r.amountIqd) || 0;
+    if (r.direction === 'RECEIVABLE') receivable += amount;
+    else payable += amount;
   }
   return { receivable, payable, net: receivable - payable };
 }

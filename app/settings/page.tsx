@@ -18,7 +18,7 @@ export default async function SettingsPage() {
   const { appliedTemplateIds = [] } = await getApplyLog(monthKey);
 
   return (
-    <main className="min-h-dvh px-4 pt-[var(--safe-top)] pb-6">
+    <main className="min-h-dvh px-4 pt-[var(--safe-top)] pb-below-nav overflow-y-auto scroll-list">
       <div className="mx-auto max-w-md">
         <h1 className="text-xl font-semibold pt-2 pb-4">{ar.settings.title}</h1>
         <SourcesSection sources={sources} sourceBalances={sourceBalances} />

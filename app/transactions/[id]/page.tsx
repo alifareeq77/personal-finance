@@ -20,7 +20,7 @@ export default async function TransactionDetailPage({
   if (!transaction) notFound();
   const dateStr = transaction.date.toISOString().slice(0, 10);
   return (
-    <main className="min-h-dvh px-4 pt-[var(--safe-top)] pb-6" style={{ paddingTop: 'calc(var(--safe-top) + 1.5rem)' }}>
+    <main className="min-h-dvh px-4 pt-[var(--safe-top)] pb-below-nav overflow-y-auto" style={{ paddingTop: 'calc(var(--safe-top) + 1.5rem)' }}>
       <div className="mx-auto max-w-md">
         <div className="flex items-center gap-2 pt-2 pb-4">
           <BackLink href="/transactions" label={ar.nav.transactions} />

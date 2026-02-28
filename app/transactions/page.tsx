@@ -53,13 +53,13 @@ export default async function TransactionsPage({
     year === new Date().getFullYear() && month === new Date().getMonth() + 1;
 
   return (
-    <main className="min-h-dvh px-4 pt-[var(--safe-top)] pb-6">
-      <div className="mx-auto max-w-md">
-        <h1 className="text-xl font-semibold pt-2 pb-4">{ar.transactions.title}</h1>
-        <div className="card-glass mb-4 p-4">
+    <main className="flex-1 min-h-0 flex flex-col px-4 pt-[var(--safe-top)] pb-6">
+      <div className="mx-auto max-w-md flex flex-col min-h-0 flex-1 w-full">
+        <h1 className="text-xl font-semibold pt-2 pb-4 shrink-0">{ar.transactions.title}</h1>
+        <div className="card-glass mb-4 p-4 shrink-0">
           <MonthPicker />
         </div>
-        <div className="card-glass mb-5 p-4 text-sm">
+        <div className="card-glass mb-5 p-4 text-sm shrink-0">
           <p className="text-gray-500">{isCurrentMonth ? ar.transactions.thisMonthSoFar : monthLabel}</p>
           <p className="mt-1">
             {ar.transactions.in} <span className="text-accent">{formatNum(summary.inTotal)}</span>
@@ -69,7 +69,7 @@ export default async function TransactionsPage({
             {ar.transactions.net} <span className={summary.net >= 0 ? 'text-accent' : 'text-red-400'}>{formatNum(summary.net)}</span>
           </p>
         </div>
-        <div className="flex gap-2.5 mb-5">
+        <div className="flex gap-2.5 mb-5 shrink-0">
           <Link
             href="/transactions/deposit"
             className="flex-1 min-h-[44px] rounded-2xl bg-accent-dim backdrop-blur-md border border-accent/20 flex items-center justify-center text-sm font-medium text-accent active:bg-accent/30 transition-colors"
@@ -83,27 +83,30 @@ export default async function TransactionsPage({
             {ar.transactions.withdraw}
           </Link>
         </div>
-        <ul className="space-y-2">
-          {transactions.map((t) => (
-            <li key={t.id}>
-              <Link
-                href={`/transactions/${t.id}`}
-                className="card-glass flex items-center justify-between px-4 py-3.5 active:opacity-90 block"
-              >
-                <div>
-                  <span className={kindColor(t.kind)}>{kindLabel(t.kind)}</span>
-                  <span className="text-gray-500 ms-2">{t.source.name}</span>
-                </div>
-                <span className={`tabular-nums ${kindColor(t.kind)}`}>
-                  {t.kind === 'EXPENSE' || t.kind === 'WITHDRAW' ? '-' : ''}
-                  {formatNum(t.amountIqd)}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        {transactions.length === 0 && (
-          <p className="text-gray-500 text-center py-10">{ar.transactions.noTransactions}</p>
+        {transactions.length === 0 ? (
+          <p className="text-gray-500 text-center py-10 shrink-0">{ar.transactions.noTransactions}</p>
+        ) : (
+          <div className="scroll-list flex-1 min-h-0 -mx-1 px-1">
+            <ul className="space-y-2 pb-2">
+              {transactions.map((t) => (
+                <li key={t.id}>
+                  <Link
+                    href={`/transactions/${t.id}`}
+                    className="card-glass flex items-center justify-between px-4 py-3.5 active:opacity-90 block"
+                  >
+                    <div>
+                      <span className={kindColor(t.kind)}>{kindLabel(t.kind)}</span>
+                      <span className="text-gray-500 ms-2">{t.source.name}</span>
+                    </div>
+                    <span className={`tabular-nums ${kindColor(t.kind)}`}>
+                      {t.kind === 'EXPENSE' || t.kind === 'WITHDRAW' ? '-' : ''}
+                      {formatNum(t.amountIqd)}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </main>
