@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateTransaction } from '@/lib/actions/transactions';
 import { formatNum } from '@/lib/currency';
 import { ar } from '@/lib/ar';
+import { CurrencyInput } from '@/components/CurrencyInput';
 
 const KIND_LABELS: Record<string, string> = {
   EXPENSE: ar.transactions.expense,
@@ -46,7 +47,12 @@ export function TransactionDetail({
 }) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
+  const [amount, setAmount] = useState('');
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (editing) setAmount(String(transaction.amountIqd));
+  }, [editing, transaction.amountIqd]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,13 +84,10 @@ export function TransactionDetail({
           </div>
           <div>
             <label className="mb-1.5 block text-gray-500 text-sm">{ar.transactionDetail.amount}</label>
-            <input
-              type="number"
+            <CurrencyInput
+              value={amount}
+              onChange={setAmount}
               name="amountIqd"
-              inputMode="numeric"
-              min={250}
-              step={250}
-              defaultValue={transaction.amountIqd}
               required
               placeholder={ar.amountPlaceholder}
               className="input-glass w-full no-number-spinner"

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { roundToIqdStep } from '@/lib/currency';
 import { ar } from '@/lib/ar';
 import { SourcePicker } from '@/components/SourcePicker';
+import { CurrencyInput } from '@/components/CurrencyInput';
 import type { TemplateItemInput } from '@/lib/actions/monthly';
 
 type Action = (formData: FormData) => Promise<{ error?: string }>;
@@ -241,13 +242,9 @@ export function MonthlyTemplateForm({
                 className="input-glass"
               />
               <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min={250}
-                  step={250}
-                  value={it.amountIqd || ''}
-                  onChange={(e) => updateItem(index, { amountIqd: Number(e.target.value.replace(/\D/g, '')) || 0 })}
+                <CurrencyInput
+                  value={String(it.amountIqd || '')}
+                  onChange={(s) => updateItem(index, { amountIqd: Number(s) || 0 })}
                   placeholder={ar.settings.amountPlaceholder}
                   className="input-glass no-number-spinner"
                 />

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { addDeposit } from '@/lib/actions/transactions';
 import { roundToIqdStep } from '@/lib/currency';
 import { ar } from '@/lib/ar';
+import { CurrencyInput } from '@/components/CurrencyInput';
 
 export function DepositForm({
   sources,
@@ -74,13 +75,9 @@ export function DepositForm({
       </div>
       <div>
         <label className="mb-1.5 block text-gray-500 text-sm">{ar.deposit.amountLabel}</label>
-        <input
-          type="number"
-          inputMode="numeric"
-          min={250}
-          step={250}
+        <CurrencyInput
           value={amount}
-          onChange={(e) => setAmount(e.target.value.replace(/\D/g, '').slice(0, 14))}
+          onChange={setAmount}
           placeholder={ar.deposit.placeholder}
           required
           className="input-glass text-lg no-number-spinner"
@@ -118,11 +115,9 @@ export function DepositForm({
               </div>
               <div>
                 <label className="text-gray-500 text-xs">{ar.deposit.fromAmount}</label>
-                <input
-                  type="number"
-                  inputMode="numeric"
+                <CurrencyInput
                   value={fxFromAmount}
-                  onChange={(e) => setFxFromAmount(e.target.value)}
+                  onChange={setFxFromAmount}
                   className="input-glass mt-1 min-h-[40px] text-sm"
                 />
               </div>

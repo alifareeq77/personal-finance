@@ -1,8 +1,9 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { ar } from '@/lib/ar';
+import { CurrencyInput } from '@/components/CurrencyInput';
 
 type Action = (formData: FormData) => Promise<{ error?: string }>;
 
@@ -15,6 +16,9 @@ export function SourceForm({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [initialBalance, setInitialBalance] = useState(() =>
+    String(initial.initialBalanceIqd ?? 0)
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,13 +45,10 @@ export function SourceForm({
       </div>
       <div>
         <label className="mb-1.5 block text-gray-500 text-sm">{ar.settings.initialBalance}</label>
-        <input
-          type="number"
+        <CurrencyInput
+          value={initialBalance}
+          onChange={setInitialBalance}
           name="initialBalanceIqd"
-          inputMode="numeric"
-          min={0}
-          step={250}
-          defaultValue={initial.initialBalanceIqd ?? 0}
           placeholder={ar.settings.initialBalancePlaceholder}
           className="input-glass no-number-spinner"
         />

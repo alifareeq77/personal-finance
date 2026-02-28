@@ -6,6 +6,7 @@ import { addDebt } from '@/lib/actions/debts';
 import { roundToIqdStep } from '@/lib/currency';
 import { ar } from '@/lib/ar';
 import { SourcePicker } from '@/components/SourcePicker';
+import { CurrencyInput } from '@/components/CurrencyInput';
 
 export function AddDebtForm({
   sources,
@@ -97,13 +98,9 @@ export function AddDebtForm({
       )}
       <div>
         <label className="mb-1.5 block text-gray-500 text-sm">{ar.common.amount}</label>
-        <input
-          type="number"
-          inputMode="numeric"
-          min={250}
-          step={250}
+        <CurrencyInput
           value={amount}
-          onChange={(e) => setAmount(e.target.value.replace(/\D/g, '').slice(0, 14))}
+          onChange={setAmount}
           placeholder={ar.amountPlaceholderIqd}
           required
           className="input-glass no-number-spinner"
