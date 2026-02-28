@@ -3,6 +3,8 @@
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { parseAmountIqd, IQD_AMOUNT_ERROR } from '@/lib/currency';
+import { getSourceBalancesUncached } from '@/lib/actions/sources';
+import { ar } from '@/lib/ar';
 
 function parseAmount(v: unknown): number | null {
   if (v == null || v === '') return null;
@@ -16,6 +18,8 @@ export async function quickAddExpense(amountIqd: number, sourceId: string) {
   if (!amt) return { error: IQD_AMOUNT_ERROR };
   const source = await prisma.source.findFirst({ where: { id: sourceId, isArchived: false } });
   if (!source) return { error: 'Invalid source' };
+  const balances = await getSourceBalancesUncached([sourceId]);
+  if ((balances[sourceId] ?? 0) < amt) return { error: ar.errors.insufficientBalance };
   await prisma.transaction.create({
     data: { kind: 'EXPENSE', amountIqd: amt, sourceId, date: new Date() },
   });
@@ -61,6 +65,8 @@ export async function addWithdraw(formData: FormData) {
   if (!amount) return { error: IQD_AMOUNT_ERROR };
   const source = await prisma.source.findFirst({ where: { id: sourceId, isArchived: false } });
   if (!source) return { error: 'Invalid source' };
+  const balances = await getSourceBalancesUncached([sourceId]);
+  if ((balances[sourceId] ?? 0) < amount) return { error: ar.errors.insufficientBalance };
   const fxEnabled = formData.get('fxEnabled') === 'true';
   const data: Parameters<typeof prisma.transaction.create>[0]['data'] = {
     kind: 'WITHDRAW',
@@ -85,6 +91,48 @@ export async function addWithdraw(formData: FormData) {
   return {};
 }
 
+/** Transfer between two sources: creates WITHDRAW from source A and DEPOSIT to source B. */
+export async function addTransfer(formData: FormData) {
+  const fromSourceId = (formData.get('fromSourceId') as string)?.trim();
+  const toSourceId = (formData.get('toSourceId') as string)?.trim();
+  const amount = parseAmountIqd(formData.get('amountIqd'));
+  if (!amount) return { error: IQD_AMOUNT_ERROR };
+  if (!fromSourceId || !toSourceId) return { error: 'Select from and to source' };
+  if (fromSourceId === toSourceId) return { error: 'From and to source must be different' };
+  const [fromSource, toSource] = await Promise.all([
+    prisma.source.findFirst({ where: { id: fromSourceId, isArchived: false } }),
+    prisma.source.findFirst({ where: { id: toSourceId, isArchived: false } }),
+  ]);
+  if (!fromSource) return { error: 'Invalid source (from)' };
+  if (!toSource) return { error: 'Invalid source (to)' };
+  const balances = await getSourceBalancesUncached([fromSourceId]);
+  if ((balances[fromSourceId] ?? 0) < amount) return { error: ar.errors.insufficientBalance };
+  await prisma.$transaction([
+    prisma.transaction.create({
+      data: {
+        kind: 'WITHDRAW',
+        amountIqd: amount,
+        sourceId: fromSourceId,
+        date: new Date(),
+        note: `تحويل إلى ${toSource.name}`,
+      },
+    }),
+    prisma.transaction.create({
+      data: {
+        kind: 'DEPOSIT',
+        amountIqd: amount,
+        sourceId: toSourceId,
+        date: new Date(),
+        note: `تحويل من ${fromSource.name}`,
+      },
+    }),
+  ]);
+  revalidatePath('/');
+  revalidatePath('/transactions');
+  revalidateTag('source-balances');
+  return {};
+}
+
 export async function getTransactions(limit = 100) {
   return await prisma.transaction.findMany({
     include: { source: true },
@@ -100,6 +148,10 @@ export async function getTransaction(id: string) {
   });
 }
 
+function isOutgoingKind(k: string) {
+  return k === 'EXPENSE' || k === 'WITHDRAW' || k === 'TRANSFER';
+}
+
 export async function updateTransaction(id: string, formData: FormData) {
   const existing = await prisma.transaction.findUnique({ where: { id } });
   if (!existing) return { error: 'Transaction not found' };
@@ -113,6 +165,23 @@ export async function updateTransaction(id: string, formData: FormData) {
   const dateStr = formData.get('date') as string;
   const date = dateStr ? new Date(dateStr) : existing.date;
   const fxEnabled = formData.get('fxEnabled') === 'true';
+
+  const sourceIds = [existing.sourceId, sourceId].filter((v, i, a) => a.indexOf(v) === i);
+  const balances = await getSourceBalancesUncached(sourceIds);
+  const oldOut = isOutgoingKind(existing.kind);
+  const newOut = isOutgoingKind(kind);
+  const oldAmount = Number(existing.amountIqd);
+  const balanceAfterOld =
+    (balances[existing.sourceId] ?? 0) + (oldOut ? oldAmount : -oldAmount);
+  const balanceAfterNew =
+    (balances[sourceId] ?? 0) + (newOut ? -amount : amount);
+  if (existing.sourceId === sourceId) {
+    const balanceAfter = (balances[sourceId] ?? 0) + (oldOut ? oldAmount : -oldAmount) + (newOut ? -amount : amount);
+    if (balanceAfter < 0) return { error: ar.errors.insufficientBalance };
+  } else {
+    if (balanceAfterOld < 0 || balanceAfterNew < 0) return { error: ar.errors.insufficientBalance };
+  }
+
   const data: Parameters<typeof prisma.transaction.update>[0]['data'] = {
     kind,
     amountIqd: amount,

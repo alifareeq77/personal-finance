@@ -58,7 +58,7 @@ export function DebtList({ debts }: { debts: Debt[] }) {
                 type="button"
                 onClick={() => handleSettle(d.id)}
                 disabled={isPending}
-                className="shrink-0 flex items-center justify-center gap-1.5 min-h-[40px] px-3.5 rounded-xl text-sm font-medium text-accent bg-accent-dim border border-accent/25 hover:bg-accent/20 active:bg-accent/30 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                className="shrink-0 flex items-center justify-center gap-1.5 min-h-[40px] px-3.5 rounded-xl text-sm font-medium text-accent bg-accent-dim hover:bg-accent/20 active:bg-accent/30 transition-colors disabled:opacity-50 disabled:pointer-events-none shadow-[0_0_0_1px_rgba(34,197,94,0.2)]"
               >
                 <CheckIcon />
                 <span>{ar.debts.settle}</span>

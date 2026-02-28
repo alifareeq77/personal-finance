@@ -111,7 +111,7 @@ export function MonthlyTemplateForm({
 
   if (sources.length === 0) {
     return (
-      <div className="card-glass border-secondary/30 bg-secondary-dim p-5 space-y-4">
+      <div className="card-glass bg-secondary-dim/50 p-5 space-y-4">
         <p className="text-secondary text-sm">{ar.settings.addSourceFirst}</p>
         <Link
           href="/settings/sources/new"
@@ -147,14 +147,14 @@ export function MonthlyTemplateForm({
             <button
               type="button"
               onClick={() => addEntry('INCOME')}
-              className="min-h-[36px] px-3 rounded-xl text-sm font-medium text-accent bg-accent-dim border border-accent/25"
+              className="min-h-[36px] px-3 rounded-xl text-sm font-medium text-accent bg-accent-dim shadow-[0_0_0_1px_rgba(34,197,94,0.2)]"
             >
               + {ar.settings.income}
             </button>
             <button
               type="button"
               onClick={() => addEntry('EXPENSE')}
-              className="min-h-[36px] px-3 rounded-xl text-sm font-medium text-red-400 bg-red-500/15 border border-red-400/20"
+              className="min-h-[36px] px-3 rounded-xl text-sm font-medium text-red-400 bg-red-500/15 shadow-[0_0_0_1px_rgba(248,113,113,0.2)]"
             >
               + {ar.settings.expense}
             </button>
@@ -197,7 +197,7 @@ export function MonthlyTemplateForm({
                         ref={kindDropdownRef}
                         data-kind-dropdown
                         role="listbox"
-                        className="fixed z-[9999] max-h-[min(280px,60vh)] list-none overflow-y-auto overflow-x-hidden rounded-xl border border-white/[0.08] bg-primary-muted p-0 shadow-xl"
+                        className="fixed z-[9999] max-h-[min(280px,60vh)] list-none overflow-y-auto overflow-x-hidden rounded-xl bg-primary-muted p-0 shadow-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-2xl"
                         style={{
                           top: kindDropdownRect.top,
                           left: kindDropdownRect.left,
@@ -207,7 +207,7 @@ export function MonthlyTemplateForm({
                         }}
                       >
                         {(['INCOME', 'EXPENSE'] as const).map((k) => (
-                          <li key={k} role="option" aria-selected={it.kind === k} className="block border-b border-white/[0.06] last:border-b-0">
+                          <li key={k} role="option" aria-selected={it.kind === k} className="block shadow-[0_1px_0_0_rgba(255,255,255,0.03)] last:shadow-none">
                             <button
                               type="button"
                               onClick={() => {

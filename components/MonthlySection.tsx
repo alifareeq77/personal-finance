@@ -92,7 +92,7 @@ export function MonthlySection({
                     <button
                       type="button"
                       onClick={() => setConfirmTemplateId(t.id)}
-                      className="min-h-[36px] px-3 rounded-xl bg-secondary-dim border border-secondary/30 text-secondary text-sm font-medium active:bg-secondary/20 transition-colors"
+                      className="min-h-[36px] px-3 rounded-xl bg-secondary-dim text-secondary text-sm font-medium active:bg-secondary/20 transition-colors shadow-[0_0_0_1px_rgba(167,139,250,0.2)]"
                     >
                       {ar.common.apply}
                     </button>

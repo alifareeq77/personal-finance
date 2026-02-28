@@ -3,6 +3,8 @@
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { parseAmountIqd, IQD_AMOUNT_ERROR } from '@/lib/currency';
+import { getSourceBalancesUncached } from '@/lib/actions/sources';
+import { ar } from '@/lib/ar';
 
 export async function getDebts() {
   const debts = await prisma.debt.findMany({
@@ -80,6 +82,9 @@ export async function settleDebt(id: string) {
         },
       });
     } else {
+      const balances = await getSourceBalancesUncached([debt.sourceId]);
+      if ((balances[debt.sourceId] ?? 0) < debt.amountIqd)
+        return { error: ar.errors.insufficientBalance };
       await prisma.transaction.create({
         data: {
           kind: 'EXPENSE',

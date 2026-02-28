@@ -12,7 +12,7 @@ export default function GlobalError({
   return (
     <html lang="ar" dir="rtl">
       <body className="text-white min-h-dvh flex items-center justify-center p-4 font-sans" style={{ background: '#0f0d1e' }}>
-        <div className="rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 p-6 max-w-md text-center">
+        <div className="rounded-2xl bg-white/10 backdrop-blur-xl p-6 max-w-md text-center shadow-[0_0_0_1px_rgba(255,255,255,0.06)]">
           <h1 className="text-lg font-semibold text-red-400">{ar.errors.somethingWrong}</h1>
           <p className="mt-2 text-gray-400 text-sm">{error.message || ar.errors.serverError}</p>
           <p className="mt-4 text-gray-500 text-xs">

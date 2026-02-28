@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { getTransactionsForMonth, getMonthSummary } from '@/lib/actions/transactions';
+import { getSources } from '@/lib/actions/sources';
 import { formatNum } from '@/lib/currency';
 import { ar } from '@/lib/ar';
 import { MonthPicker } from '@/components/MonthPicker';
+import { TransferModal } from '@/components/TransferModal';
 
 function kindLabel(kind: string) {
   const map: Record<string, string> = {
@@ -43,9 +45,10 @@ export default async function TransactionsPage({
   const { month: monthParam } = await searchParams;
   const { year, month } = parseMonthParam(monthParam ?? null);
 
-  const [transactions, summary] = await Promise.all([
+  const [transactions, summary, sources] = await Promise.all([
     getTransactionsForMonth(year, month),
     getMonthSummary(year, month),
+    getSources(),
   ]);
 
   const monthLabel = new Date(year, month - 1).toLocaleString('ar-IQ', { month: 'long', year: 'numeric', numberingSystem: 'latn' });
@@ -72,16 +75,17 @@ export default async function TransactionsPage({
         <div className="flex gap-2.5 mb-5 shrink-0">
           <Link
             href="/transactions/deposit"
-            className="flex-1 min-h-[44px] rounded-2xl bg-accent-dim backdrop-blur-md border border-accent/20 flex items-center justify-center text-sm font-medium text-accent active:bg-accent/30 transition-colors"
+            className="flex-1 min-h-[44px] rounded-2xl bg-accent-dim backdrop-blur-xl flex items-center justify-center text-sm font-medium text-accent active:bg-accent/30 transition-colors shadow-[0_0_0_1px_rgba(34,197,94,0.12)]"
           >
             {ar.transactions.deposit}
           </Link>
           <Link
             href="/transactions/withdraw"
-            className="flex-1 min-h-[44px] rounded-2xl bg-red-500/20 backdrop-blur-md border border-red-400/20 flex items-center justify-center text-sm font-medium text-red-400 active:bg-red-500/30 transition-colors"
+            className="flex-1 min-h-[44px] rounded-2xl bg-red-500/20 backdrop-blur-xl flex items-center justify-center text-sm font-medium text-red-400 active:bg-red-500/30 transition-colors shadow-[0_0_0_1px_rgba(248,113,113,0.12)]"
           >
             {ar.transactions.withdraw}
           </Link>
+          <TransferModal sources={sources} />
         </div>
         {transactions.length === 0 ? (
           <p className="text-gray-500 text-center py-10 shrink-0">{ar.transactions.noTransactions}</p>

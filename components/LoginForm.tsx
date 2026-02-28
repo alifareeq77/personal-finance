@@ -43,7 +43,7 @@ export function LoginForm({ hasDevicePassword }: { hasDevicePassword: boolean })
 
   return (
     <main className="min-h-dvh flex flex-col items-center justify-center px-4 pt-[var(--safe-top)]">
-      <div className="card-glass border-secondary/30 bg-secondary-dim w-full max-w-sm p-6">
+      <div className="card-glass bg-secondary-dim/50 w-full max-w-sm p-6">
         <h1 className="text-xl font-semibold text-center mb-1">
           {isSet ? ar.auth.setPasswordTitle : ar.auth.login}
         </h1>

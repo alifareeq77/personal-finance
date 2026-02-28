@@ -58,6 +58,9 @@ export const ar = {
     depositKind: 'إيداع',
     withdrawKind: 'سحب',
     transfer: 'تحويل',
+    transferBetween: 'تحويل بين المصادر',
+    fromSource: 'من مصدر',
+    toSource: 'إلى مصدر',
     noTransactions: 'لا توجد معاملات هذا الشهر.',
   },
   transactionTitle: 'المعاملة',
@@ -168,6 +171,7 @@ export const ar = {
     switchToSet: 'تعيين كلمة مرور لهذا الجهاز',
   },
   errors: {
+    insufficientBalance: 'الرصيد غير كافٍ في هذا المصدر',
     somethingWrong: 'حدث خطأ',
     tryAgain: 'حاول مرة أخرى',
     serverError: 'حدث خطأ في الخادم.',

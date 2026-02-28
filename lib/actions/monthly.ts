@@ -3,6 +3,8 @@
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { parseAmountIqd, IQD_AMOUNT_ERROR } from '@/lib/currency';
+import { getSourceBalancesUncached } from '@/lib/actions/sources';
+import { ar } from '@/lib/ar';
 
 /** Multi-entry templates (name + items with description, amount, source, kind) */
 export async function getMonthlyTemplates() {
@@ -143,6 +145,17 @@ export async function applyMonthlyTemplate(monthKey: string, templateId: string)
   if (!template) return { error: 'Template not found' };
   if (!template.isActive) return { error: 'Template is inactive' };
   if (template.items.length === 0) return { error: 'Template has no entries' };
+  const sourceIds = Array.from(new Set(template.items.map((i) => i.sourceId)));
+  const balances = await getSourceBalancesUncached(sourceIds);
+  const afterBalance: Record<string, number> = { ...balances };
+  for (const item of template.items) {
+    if (item.kind === 'INCOME' || item.kind === 'DEPOSIT') {
+      afterBalance[item.sourceId] = (afterBalance[item.sourceId] ?? 0) + item.amountIqd;
+    } else {
+      afterBalance[item.sourceId] = (afterBalance[item.sourceId] ?? 0) - item.amountIqd;
+      if (afterBalance[item.sourceId] < 0) return { error: ar.errors.insufficientBalance };
+    }
+  }
   const [y, m] = monthKey.split('-').map(Number);
   const date = new Date(y, m - 1, 1);
   await prisma.$transaction(async (tx) => {

@@ -58,7 +58,7 @@ export function SourcePicker({
   const dropdownContent = open && dropdownRect && typeof document !== 'undefined' && (
     <ul
       data-source-dropdown
-      className="fixed z-[9999] max-h-[min(280px,60vh)] list-none overflow-y-auto overflow-x-hidden rounded-xl border border-white/[0.08] bg-primary-muted p-0 shadow-xl"
+      className="fixed z-[9999] max-h-[min(280px,60vh)] list-none overflow-y-auto overflow-x-hidden rounded-xl bg-primary-muted p-0 shadow-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-2xl"
       role="listbox"
       style={{
         top: dropdownRect.top,
@@ -69,7 +69,7 @@ export function SourcePicker({
       }}
     >
       {sources.map((s) => (
-        <li key={s.id} role="option" aria-selected={value === s.id} className="block border-b border-white/[0.06] last:border-b-0">
+        <li key={s.id} role="option" aria-selected={value === s.id} className="block shadow-[0_1px_0_0_rgba(255,255,255,0.03)] last:shadow-none">
           <button
             type="button"
             onClick={() => {

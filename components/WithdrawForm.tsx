@@ -46,7 +46,7 @@ export function WithdrawForm({
 
   if (sources.length === 0) {
     return (
-      <div className="card-glass border-secondary/30 bg-secondary-dim p-5 space-y-4">
+      <div className="card-glass bg-secondary-dim/50 p-5 space-y-4">
         <p className="text-secondary text-sm">{ar.withdraw.addSourceFirst}</p>
         <Link
           href="/settings/sources/new"
@@ -87,7 +87,7 @@ export function WithdrawForm({
         <summary className="min-h-[44px] cursor-pointer list-none px-4 py-3 text-gray-500 text-sm">
           {ar.withdraw.advanced}
         </summary>
-        <div className="border-t border-white/[0.08] p-4 space-y-3">
+        <div className="p-4 space-y-3 shadow-[0_1px_0_0_rgba(255,255,255,0.03)]">
           <label className="flex items-center gap-2 text-gray-400 text-sm">
             <input type="checkbox" checked={fxOpen} onChange={(e) => setFxOpen(e.target.checked)} />
             {ar.withdraw.useFx}

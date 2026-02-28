@@ -22,7 +22,15 @@ const tajawal = Tajawal({
 export const metadata: Metadata = {
   title: 'المالية',
   description: 'تتبع المالية الشخصية',
-  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'المالية' },
+  manifest: '/manifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'المالية',
+  },
+  icons: {
+    apple: '/apple-icon',
+  },
 };
 
 export const viewport: Viewport = {

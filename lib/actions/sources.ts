@@ -44,6 +44,33 @@ export async function getSourceBalances(includeArchived = false): Promise<Record
   )();
 }
 
+/** Uncached current balance for given source IDs. Use for validation before deducting. */
+export async function getSourceBalancesUncached(
+  sourceIds: string[]
+): Promise<Record<string, number>> {
+  if (sourceIds.length === 0) return {};
+  const sources = await prisma.source.findMany({
+    where: { id: { in: sourceIds } },
+    select: { id: true, initialBalanceIqd: true },
+  });
+  const txns = await prisma.transaction.findMany({
+    where: { sourceId: { in: sourceIds } },
+    select: { sourceId: true, kind: true, amountIqd: true },
+  });
+  const deltaBySource: Record<string, number> = {};
+  for (const t of txns) {
+    if (!deltaBySource[t.sourceId]) deltaBySource[t.sourceId] = 0;
+    if (t.kind === 'INCOME' || t.kind === 'DEPOSIT') deltaBySource[t.sourceId] += t.amountIqd;
+    else if (t.kind === 'EXPENSE' || t.kind === 'WITHDRAW' || t.kind === 'TRANSFER')
+      deltaBySource[t.sourceId] -= t.amountIqd;
+  }
+  const out: Record<string, number> = {};
+  for (const s of sources) {
+    out[s.id] = (s.initialBalanceIqd ?? 0) + (deltaBySource[s.id] ?? 0);
+  }
+  return out;
+}
+
 export async function createSource(formData: FormData) {
   const name = (formData.get('name') as string)?.trim();
   if (!name) return { error: 'Name is required' };

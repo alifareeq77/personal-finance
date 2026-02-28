@@ -66,7 +66,7 @@ export function QuickAddForm({
 
   if (sources.length === 0) {
     return (
-      <div className="card-glass border-secondary/30 bg-secondary-dim p-5 space-y-4">
+      <div className="card-glass bg-secondary-dim/50 p-5 space-y-4">
         <p className="text-secondary text-sm">{ar.home.addSourceHint}</p>
         <Link
           href="/settings/sources/new"
@@ -90,12 +90,12 @@ export function QuickAddForm({
         >
           <div
             role="alert"
-            className={`pointer-events-auto flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-lg min-w-0 max-w-[320px] ${
+            className={`pointer-events-auto flex items-center gap-3 rounded-2xl px-4 py-3 shadow-lg min-w-0 max-w-[320px] backdrop-blur-xl ${
               toastExiting ? 'animate-toast-out' : 'animate-toast-in'
             } ${
               message.type === 'success'
-                ? 'bg-accent-dim text-accent border-accent/30 backdrop-blur-xl'
-                : 'bg-red-500/15 text-red-300 border-red-400/25 backdrop-blur-xl'
+                ? 'bg-accent-dim text-accent shadow-[0_0_0_1px_rgba(34,197,94,0.2)]'
+                : 'bg-red-500/15 text-red-300 shadow-[0_0_0_1px_rgba(248,113,113,0.2)]'
             }`}
           >
             <span className="flex-1 text-sm font-medium truncate">{message.text}</span>

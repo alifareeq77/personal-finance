@@ -54,7 +54,7 @@ export function AddDebtForm({
           onClick={() => setDirection('RECEIVABLE')}
           className={`flex-1 min-h-[44px] rounded-xl text-sm font-medium transition-colors ${
             direction === 'RECEIVABLE'
-              ? 'bg-accent-dim border border-accent/30 text-accent'
+              ? 'bg-accent-dim text-accent shadow-[0_0_0_1px_rgba(34,197,94,0.25)]'
               : 'btn-glass text-gray-400'
           }`}
         >
@@ -65,7 +65,7 @@ export function AddDebtForm({
           onClick={() => setDirection('PAYABLE')}
           className={`flex-1 min-h-[44px] rounded-xl text-sm font-medium transition-colors ${
             direction === 'PAYABLE'
-              ? 'bg-red-500/25 border border-red-400/30 text-red-400'
+              ? 'bg-red-500/25 text-red-400 shadow-[0_0_0_1px_rgba(248,113,113,0.25)]'
               : 'btn-glass text-gray-400'
           }`}
         >

@@ -36,10 +36,10 @@ export function AddDebtModal({ sources }: { sources: { id: string; name: string 
         onClick={close}
       />
       <div
-        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.08] bg-[var(--color-primary-muted)] shadow-xl"
+        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-[var(--color-primary-muted)] shadow-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 flex items-center justify-between gap-3 px-4 py-3 border-b border-white/[0.08] bg-[var(--color-primary-muted)] z-10">
+        <div className="sticky top-0 flex items-center justify-between gap-3 px-4 py-3 bg-[var(--color-primary-muted)] z-10 shadow-[0_1px_0_0_rgba(255,255,255,0.03)]">
           <h2 id="add-debt-title" className="text-lg font-semibold">
             {ar.debts.addDebt}
           </h2>
@@ -67,7 +67,7 @@ export function AddDebtModal({ sources }: { sources: { id: string; name: string 
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="w-full min-h-[48px] rounded-2xl bg-accent-dim backdrop-blur-md border border-accent/20 flex items-center justify-center gap-2 text-sm font-medium text-accent active:bg-accent/30 transition-colors"
+        className="w-full min-h-[48px] rounded-2xl bg-accent-dim backdrop-blur-xl flex items-center justify-center gap-2 text-sm font-medium text-accent active:bg-accent/30 transition-colors shadow-[0_0_0_1px_rgba(34,197,94,0.12)]"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <path d="M12 5v14M5 12h14" />
